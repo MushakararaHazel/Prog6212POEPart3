@@ -12,7 +12,7 @@ namespace CMCS.Models.ViewModels
         public string LecturerName { get; set; } = string.Empty;
         public string LecturerId { get; set; } = string.Empty;
 
-        [Required]
+        [Range(0, 180, ErrorMessage = "Hours worked cannot exceed 180 per month.")]
         public decimal HoursWorked { get; set; }
 
         [Required]

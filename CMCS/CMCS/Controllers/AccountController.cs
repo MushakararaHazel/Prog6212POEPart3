@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CMCS.Data;
+﻿using CMCS.Data;
 using CMCS.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMCS.Controllers
@@ -32,9 +33,12 @@ namespace CMCS.Controllers
             }
 
             // Store minimal info in Session
-            HttpContext.Session.SetInt32("UserId", user.Id);
+            
             HttpContext.Session.SetString("Username", user.Username);
-            HttpContext.Session.SetString("Role", user.Role.ToString());
+            HttpContext.Session.SetString("UserId", user.Id.ToString());     // FIXED
+            HttpContext.Session.SetString("UserRole", user.Role.ToString()); // FIXED
+
+
 
             // redirect based on role or back to ReturnUrl
             if (!string.IsNullOrEmpty(returnUrl))
