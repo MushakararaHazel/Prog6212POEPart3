@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CMCS.Filters;
 using CMCS.Models;
 using CMCS.Models.ViewModels;
 using CMCS.Services;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace CMCS.Controllers
 {
+    [AuthorizeRole("IC")]
     public class LecturerController : Controller
     {
         private readonly IClaimService _service;

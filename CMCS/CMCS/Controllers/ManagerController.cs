@@ -1,10 +1,12 @@
 ﻿using CMCS.Data;
+using CMCS.Filters;
 using CMCS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMCS.Controllers
 {
+    [AuthorizeRole("Manager")]
     public class ManagerController : Controller
     {
         private readonly AppDbContext _db;

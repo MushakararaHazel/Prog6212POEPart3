@@ -1,4 +1,5 @@
 ﻿using CMCS.Data;
+using CMCS.Filters;
 using CMCS.Models;
 using CMCS.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CMCS.Controllers
 {
+    [AuthorizeRole("Coordinator")]
     public class CoordinatorController : Controller
     {
             private readonly AppDbContext _db;
