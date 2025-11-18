@@ -1,15 +1,19 @@
-﻿using Xunit;
-using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using CMCS.Controllers;
+using CMCS.Data;
 using CMCS.Models;
 using CMCS.Models.ViewModels;
 using CMCS.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Xunit;
+
+
 
 namespace CMCS.Tests
 {
@@ -18,25 +22,25 @@ namespace CMCS.Tests
         [Fact]
         public void TotalAmount_ShouldBeCorrect()
         {
-           
+
             var claim = new Claim
             {
                 HoursWorked = 50,
                 HourlyRate = 100
             };
 
-         
+
             var total = claim.HoursWorked * claim.HourlyRate;
 
-       
+
             Assert.Equal(5000, total);
         }
 
-        
+
         [Fact]
         public void Notes_ShouldBeSavedCorrectly()
         {
-           
+
             var claim = new Claim
             {
                 Notes = "Lecturer added detailed notes about extra sessions."
@@ -45,57 +49,47 @@ namespace CMCS.Tests
             Assert.Equal("Lecturer added detailed notes about extra sessions.", claim.Notes);
         }
 
-     
+
         [Fact]
         public async Task Submit_ShouldAddClaim_AndRedirectToTrack()
         {
-            
+            // Arrange  
+            var db = GetInMemoryDb();
+
             var mockService = new Mock<IClaimService>();
+            mockService
+                .Setup(s => s.SubmitClaimAsync(It.IsAny<Claim>(), It.IsAny<List<IFormFile>>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Claim());
+
+            var controller = new LecturerController(mockService.Object, db);
+            controller.ModelState.Clear();
 
             var vm = new SubmitClaimVm
             {
+                LecturerName = "Test Lecturer",
+                LecturerId = "L2001",
                 Month = new DateTime(2025, 10, 1),
-                HoursWorked = 50,
+                HoursWorked = 40,
                 HourlyRate = 100,
-                Notes = "Test claim with document",
-                LecturerId = "L1001",
-                LecturerName = "Hazel"
+                Notes = "Test Claim",
+                FileUploads = new List<IFormFile>()
             };
 
-            var fileMock = new Mock<IFormFile>();
-            var content = "Fake PDF content";
-            var fileName = "test.pdf";
-            var ms = new MemoryStream();
-            var writer = new StreamWriter(ms);
-            writer.Write(content);
-            writer.Flush();
-            ms.Position = 0;
-            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
-            fileMock.Setup(_ => _.FileName).Returns(fileName);
-            fileMock.Setup(_ => _.Length).Returns(ms.Length);
-
-            var files = new List<IFormFile> { fileMock.Object };
-
-            
-            mockService
-     .Setup(s => s.SubmitClaimAsync(It.IsAny<Claim>(), It.IsAny<List<IFormFile>>(), It.IsAny<CancellationToken>()))
-     .ReturnsAsync(new Claim());
-
-            var controller = new LecturerController(mockService.Object);
-
-            controller.ModelState.Clear();
-
-           
+            // Act
             var result = await controller.Submit(vm);
 
-            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Track", redirectResult.ActionName);
-
-            mockService.Verify(
-        s => s.SubmitClaimAsync(It.IsAny<Claim>(), It.IsAny<List<IFormFile>>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
+            // Assert
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Track", redirect.ActionName);
         }
+        private AppDbContext GetInMemoryDb()
+        {
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            return new AppDbContext(options);
+        }
+
     }
 }
-

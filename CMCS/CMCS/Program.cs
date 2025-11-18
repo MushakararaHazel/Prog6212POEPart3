@@ -17,11 +17,19 @@ namespace CMCS
 
             // ✅ Add MVC
             builder.Services.AddControllersWithViews();
-            builder.Services.AddSession(); // NEW
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             // ✅ Register your custom services
             builder.Services.AddScoped<IClaimService, ClaimService>();
             builder.Services.AddSingleton<IFileValidator, FileValidator>();
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var app = builder.Build();
 
@@ -34,6 +42,7 @@ namespace CMCS
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
             app.UseSession();
 
             app.MapControllerRoute(

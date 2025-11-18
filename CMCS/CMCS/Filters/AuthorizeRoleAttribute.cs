@@ -14,22 +14,22 @@ namespace CMCS.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var currentRole = context.HttpContext.Session.GetString("Role");
+            // Get role from session (FIXED)
+            var currentRole = context.HttpContext.Session.GetString("UserRole");
 
             if (string.IsNullOrEmpty(currentRole))
             {
-                // Not logged in → redirect to Login
-                context.Result = new RedirectToActionResult("Login", "Account", null);
+                // User not logged in
+                context.Result = new RedirectToActionResult("Login", "Account",
+                    new { returnUrl = context.HttpContext.Request.Path });
                 return;
             }
 
+            // Compare roles (case insensitive)
             if (!currentRole.Equals(_role, StringComparison.OrdinalIgnoreCase))
             {
-                // Logged in but wrong role
-                context.Result = new ContentResult()
-                {
-                    Content = "Access Denied: You do not have permission to access this page."
-                };
+                // User logged in but lacks permission
+                context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
         }
     }

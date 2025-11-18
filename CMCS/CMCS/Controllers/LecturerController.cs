@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CMCS.Controllers
 {
-    [AuthorizeRole("IC")]
+    [AuthorizeRole("Lecturer")]
     public class LecturerController : Controller
     {
         private readonly AppDbContext _db;
@@ -25,18 +25,19 @@ namespace CMCS.Controllers
         // -----------------------------------------
         public IActionResult Submit()
         {
-            var lecturerName = HttpContext.Session.GetString("Username");
-            var lecturerId = HttpContext.Session.GetString("UserId");
-
-            if (string.IsNullOrEmpty(lecturerName) || string.IsNullOrEmpty(lecturerId))
+            var fullName = HttpContext.Session.GetString("FullName");
+            var lecturerId = HttpContext.Session.GetInt32("UserId");
+            var rate = HttpContext.Session.GetString("HourlyRate");
+            if (string.IsNullOrEmpty(fullName) || lecturerId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
             var vm = new SubmitClaimVm
             {
-                LecturerName = lecturerName,
-                LecturerId = lecturerId
+                LecturerName = fullName,
+                LecturerId = lecturerId.Value.ToString(),
+                  HourlyRate = decimal.Parse(rate ?? "0")
             };
 
             return View(vm);
@@ -79,9 +80,19 @@ namespace CMCS.Controllers
         [HttpGet]
         public async Task<IActionResult> Track(string? searchLecturerId = null)
         {
+            var myId = HttpContext.Session.GetInt32("UserId");
+
+            if (myId == null)
+                return RedirectToAction("Login", "Account");
+
             var claims = await _service.GetMyClaimsAsync();
 
-            if (!string.IsNullOrEmpty(searchLecturerId))
+            // Guarantee only lecturer's claims are shown
+            claims = claims
+                .Where(c => c.LecturerId == myId.ToString())
+                .ToList();
+
+            if (!string.IsNullOrWhiteSpace(searchLecturerId))
             {
                 claims = claims
                     .Where(c => c.LecturerId.Contains(searchLecturerId, StringComparison.OrdinalIgnoreCase))
