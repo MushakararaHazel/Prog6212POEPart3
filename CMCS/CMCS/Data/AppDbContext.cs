@@ -10,6 +10,7 @@ namespace CMCS.Data
         public DbSet<Claim> Claims => Set<Claim>();
         public DbSet<SupportingDocument> SupportingDocuments => Set<SupportingDocument>();
 
+        public DbSet<AppUser> Users { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
