@@ -17,6 +17,7 @@ namespace CMCS
 
             // ✅ Add MVC
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession(); // NEW
 
             // ✅ Register your custom services
             builder.Services.AddScoped<IClaimService, ClaimService>();
@@ -33,6 +34,7 @@ namespace CMCS
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
