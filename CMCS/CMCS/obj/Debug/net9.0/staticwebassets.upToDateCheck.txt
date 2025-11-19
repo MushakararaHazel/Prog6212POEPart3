@@ -66,7 +66,6 @@ wwwroot\uploads\6753fc21-3b13-48e9-aae1-4d6b2ffefafa_cupcakes.jpg
 wwwroot\uploads\7e358a5b-db2f-47ce-91d1-dd24fe54c711_6fea3ee614ed42b38126ad01f410162e.pdf
 wwwroot\uploads\7e8b3cd2-f86f-4535-a51c-9a4b3c09aa4c_09f8387a2ccc43539938b7383dec0da9.pdf
 wwwroot\uploads\825126e9-f99b-4b84-86af-b7991e29ba50_09f8387a2ccc43539938b7383dec0da9.pdf
-wwwroot\uploads\8bcdf29b-3ae6-451a-a832-c3dd3f4254cd_7e8b3cd2-f86f-4535-a51c-9a4b3c09aa4c_09f8387a2ccc43539938b7383dec0da9.pdf
 wwwroot\uploads\8d5476c9-9b33-4689-9211-4c03debecd95_6fea3ee614ed42b38126ad01f410162e.pdf
 wwwroot\uploads\960e3d6d-2d63-409e-b72c-d36a268d3da0_3fc831547af144eda739ed0327c846f1.pdf
 wwwroot\uploads\9e88690c-eac0-4452-a16b-1bcdb9bce510_cupcakes.jpg
@@ -85,6 +84,8 @@ wwwroot\uploads\f19a86b1-a977-4744-afeb-241bdd96901d_1b8be76eff514a0ca2a7429dfe1
 wwwroot\uploads\f3e6c9ef-b817-4ec5-97a3-87f936781560_09f8387a2ccc43539938b7383dec0da9.pdf
 wwwroot\uploads\f890fd89-23fb-40db-9b9d-3841305043e9_09f8387a2ccc43539938b7383dec0da9.pdf
 wwwroot\uploads\fa82818d-155f-404d-ac49-3a7987bedb9e_cupcakes.jpg
+wwwroot\uploads\8bcdf29b-3ae6-451a-a832-c3dd3f4254cd_7e8b3cd2-f86f-4535-a51c-9a4b3c09aa4c_09f8387a2ccc43539938b7383dec0da9.pdf
+wwwroot\uploads\0a293c04-86ef-45a8-b08c-71da63506bdb_7e358a5b-db2f-47ce-91d1-dd24fe54c711_6fea3ee614ed42b38126ad01f410162e.pdf
 C:\Users\lab_services_student\Desktop\Prog6212POEPart3\CMCS\CMCS\wwwroot\css\site.css
 C:\Users\lab_services_student\Desktop\Prog6212POEPart3\CMCS\CMCS\wwwroot\favicon.ico
 C:\Users\lab_services_student\Desktop\Prog6212POEPart3\CMCS\CMCS\wwwroot\js\site.js

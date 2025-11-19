@@ -1,60 +1,74 @@
-﻿using QuestPDF.Fluent;
-using QuestPDF.Infrastructure;
+﻿using CMCS.Models;
 using CMCS.Models.ViewModels;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
+using QuestPDF.Helpers;
 
-namespace CMCS.Services
+namespace CMCS.Reports
 {
     public class ReportDocument : IDocument
     {
-        private readonly ReportVm _model;
+        private readonly ReportVm _vm;
 
-        public ReportDocument(ReportVm model)
+        public ReportDocument(ReportVm vm)
         {
-            _model = model;
+            _vm = vm;
         }
 
-        public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
+        public DocumentMetadata GetMetadata() => new DocumentMetadata
+        {
+            Title = "User Report",
+            Author = "CMCS System",
+            Subject = "User Listing",
+            Keywords = "Users, CMCS, Report"
+        };
 
         public void Compose(IDocumentContainer container)
         {
             container.Page(page =>
             {
-                page.Margin(40);
+                page.Margin(20);
 
-                page.Header().Text("CMCS User Report")
-                    .FontSize(24).Bold().AlignCenter();
+                page.Header()
+                    .Text("CMCS - User Report")
+                    .FontSize(20)
+                    .SemiBold()
+                    .FontColor(Colors.Blue.Medium);
 
-                page.Content().Table(table =>
-                {
-                    table.ColumnsDefinition(columns =>
+                page.Content()
+                    .PaddingVertical(10)
+                    .Table(table =>
                     {
-                        columns.RelativeColumn();
-                        columns.RelativeColumn();
-                        columns.RelativeColumn();
-                        columns.RelativeColumn();
-                        columns.RelativeColumn();
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.ConstantColumn(60);
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                        });
+
+                        // HEADER
+                        table.Header(header =>
+                        {
+                            header.Cell().Text("ID").Bold();
+                            header.Cell().Text("Username").Bold();
+                            header.Cell().Text("Email").Bold();
+                            header.Cell().Text("Role").Bold();
+                        });
+
+                        // ROWS
+                        foreach (var u in _vm.Users)
+                        {
+                            table.Cell().Text(u.Id.ToString());
+                            table.Cell().Text(u.Username);
+                            table.Cell().Text(u.Email ?? "-");
+                            table.Cell().Text(u.Role);
+                        }
                     });
 
-                    table.Header(header =>
-                    {
-                        header.Cell().Text("Username").Bold();
-                        header.Cell().Text("Name").Bold();
-                        header.Cell().Text("Email").Bold();
-                        header.Cell().Text("Rate").Bold();
-                        header.Cell().Text("Role").Bold();
-                    });
-
-                    foreach (var u in _model.Users)
-                    {
-                        table.Cell().Text(u.Username);
-                        table.Cell().Text($"{u.FirstName} {u.LastName}");
-                        table.Cell().Text(u.Email);
-                        table.Cell().Text(u.HourlyRate.ToString("N2"));
-                        table.Cell().Text(u.Role.ToString());
-                    }
-                });
-
-                page.Footer().AlignRight().Text($"Generated: {_model.GeneratedOn}");
+                page.Footer()
+                    .AlignCenter()
+                    .Text($"Generated on {DateTime.Now:yyyy-MM-dd HH:mm}");
             });
         }
     }

@@ -2,6 +2,7 @@
 using CMCS.Filters;
 using CMCS.Models;
 using CMCS.Models.ViewModels;
+using CMCS.Reports;
 using CMCS.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -110,11 +111,16 @@ namespace CMCS.Controllers
         {
             var users = await _db.Users.ToListAsync();
 
-            var vm = new ReportVm { Users = users };
+            var vm = new ReportVm
+            {
+                Users = users
+            };
+
             var pdfBytes = new ReportDocument(vm).GeneratePdf();
 
             return File(pdfBytes, "application/pdf", "UserReport.pdf");
         }
+
     }
 }
 
