@@ -2,25 +2,73 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-4">
-        <h2 class="text-center mb-3">Login</h2>
+<div class="container mt-5">
 
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger">@ViewBag.Error</div>
-        }
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">Login</h2>
+        <p class="text-muted">Enter your username and password</p>
+    </div>
 
-        <form asp-action="Login" method="post">
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input name="username" class="form-control" />
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+
+            <!-- Login Form -->
+            <form asp-action="Login" method="post">
+
+                <!-- Username -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Username</label>
+                    <input name="Username" class="form-control" required />
+                </div>
+
+                <!-- Password with Eye Toggle -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Password</label>
+
+                    <div class="input-group">
+                        <input id="PasswordInput" name="Password" type="password" class="form-control" required />
+                        <span class="input-group-text" style="cursor:pointer;" onclick="togglePassword()">
+                            <i id="EyeIcon" class="bi bi-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100" type="submit">
+                    Login
+                </button>
+
+            </form>
+
+            <!-- Marker Login Details -->
+            <div class="alert alert-secondary mt-4 small">
+                <strong>Login Details (for marker):</strong><br />
+                <b>HR:</b> Username: <span class="text-primary">HR1</span>, Password: <span class="text-primary">123</span><br />
+                <b>Lecturer:</b> Username: <span class="text-primary">L2001</span>, Password: <span class="text-primary">123</span><br />
+                <b>Manager:</b> Username: <span class="text-primary">MANAGER1</span>, Password: <span class="text-primary">123</span>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input name="password" type="password" class="form-control" />
-            </div>
-            <button class="btn btn-primary w-100">Login</button>
-        </form>
+
+        </div>
+    </div>
+
+    <div class="text-center mt-5 small text-muted">
+        © 2025 Contract Monthly Claim System (CMCS)
     </div>
 </div>
+
+<!-- Password Toggle Script -->
+<script>
+    function togglePassword() {
+        var input = document.getElementById("PasswordInput");
+        var icon = document.getElementById("EyeIcon");
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
+    }
+</script>

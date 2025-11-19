@@ -1,0 +1,54 @@
+﻿@model CMCS.Models.AppUser
+
+<div class="container mt-4">
+    <h2 class="fw-bold text-primary mb-3">
+        <i class="bi bi-pencil-square"></i> Edit User
+    </h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label>Password (leave blank to keep existing)</label>
+                <input asp-for="PasswordHash" type="password" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="HourlyRate"></label>
+                <input asp-for="HourlyRate" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Role"></label>
+                <select asp-for="Role" class="form-select"
+                        asp-items="Html.GetEnumSelectList<CMCS.Models.UserRole>()"></select>
+            </div>
+        </div>
+
+        <button class="btn btn-primary">Update</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>

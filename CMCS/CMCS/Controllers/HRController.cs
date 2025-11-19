@@ -2,8 +2,10 @@
 using CMCS.Filters;
 using CMCS.Models;
 using CMCS.Models.ViewModels;
+using CMCS.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Fluent;
 
 namespace CMCS.Controllers
 {
@@ -13,7 +15,7 @@ namespace CMCS.Controllers
         private readonly AppDbContext _db;
         public HRController(AppDbContext db) => _db = db;
 
-        // Show all users
+      
         public async Task<IActionResult> Index()
         {
             var users = await _db.Users
@@ -24,40 +26,35 @@ namespace CMCS.Controllers
             return View(users);
         }
 
-        // -----------------------
-        // CREATE USER
-        // -----------------------
-
+     
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CreateUser()
         {
             return View(new AppUser());
         }
 
+       
         [HttpPost]
-        public async Task<IActionResult> Create(AppUser user)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(AppUser model)
         {
             if (!ModelState.IsValid)
-                return View(user);
+                return View(model);
 
-            // Required POE password (no hashing)
-            if (string.IsNullOrWhiteSpace(user.PasswordHash))
+            if (string.IsNullOrWhiteSpace(model.PasswordHash))
             {
                 ModelState.AddModelError("PasswordHash", "Password is required.");
-                return View(user);
+                return View(model);
             }
 
-            _db.Users.Add(user);
+            _db.Users.Add(model);
             await _db.SaveChangesAsync();
 
             TempData["Success"] = "User created successfully!";
             return RedirectToAction(nameof(Index));
         }
 
-        // -----------------------
-        // EDIT USER
-        // -----------------------
-
+      
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -67,7 +64,9 @@ namespace CMCS.Controllers
             return View(user);
         }
 
+     
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(AppUser user)
         {
             if (!ModelState.IsValid)
@@ -76,18 +75,15 @@ namespace CMCS.Controllers
             var existing = await _db.Users.FindAsync(user.Id);
             if (existing == null) return NotFound();
 
-            // Update fields but keep old password if left blank
             existing.Username = user.Username;
+            existing.Email = user.Email;
             existing.FirstName = user.FirstName;
             existing.LastName = user.LastName;
-            existing.Email = user.Email;
             existing.HourlyRate = user.HourlyRate;
             existing.Role = user.Role;
 
             if (!string.IsNullOrWhiteSpace(user.PasswordHash))
-            {
-                existing.PasswordHash = user.PasswordHash;   // replace
-            }
+                existing.PasswordHash = user.PasswordHash;
 
             await _db.SaveChangesAsync();
 
@@ -95,15 +91,11 @@ namespace CMCS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // -----------------------
-        // DELETE USER
-        // -----------------------
-
+       
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _db.Users.FindAsync(id);
-
             if (user != null)
             {
                 _db.Users.Remove(user);
@@ -114,23 +106,15 @@ namespace CMCS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // -----------------------
-        // REPORTS
-        // -----------------------
-
-        public async Task<IActionResult> Report()
+        public async Task<IActionResult> GeneratePdf()
         {
-            var report = await _db.Claims
-                .GroupBy(c => c.LecturerId)
-                .Select(g => new ClaimReportVm
-                {
-                    LecturerId = g.Key,
-                    TotalAmount = g.Sum(x => x.HoursWorked * x.HourlyRate),
-                    ClaimCount = g.Count()
-                })
-                .ToListAsync();
+            var users = await _db.Users.ToListAsync();
 
-            return View(report);
+            var vm = new ReportVm { Users = users };
+            var pdfBytes = new ReportDocument(vm).GeneratePdf();
+
+            return File(pdfBytes, "application/pdf", "UserReport.pdf");
         }
     }
 }
+

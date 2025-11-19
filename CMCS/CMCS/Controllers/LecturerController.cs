@@ -20,30 +20,29 @@ namespace CMCS.Controllers
             _db = db;
         }
 
-        // -----------------------------------------
-        // STEP 6 — Auto-fill lecturer details
-        // -----------------------------------------
+        
         public IActionResult Submit()
         {
             var fullName = HttpContext.Session.GetString("FullName");
             var lecturerId = HttpContext.Session.GetInt32("UserId");
             var rate = HttpContext.Session.GetString("HourlyRate");
-            if (string.IsNullOrEmpty(fullName) || lecturerId == null)
-            {
+
+            if (fullName == null || lecturerId == null)
                 return RedirectToAction("Login", "Account");
-            }
 
             var vm = new SubmitClaimVm
             {
                 LecturerName = fullName,
                 LecturerId = lecturerId.Value.ToString(),
-                  HourlyRate = decimal.Parse(rate ?? "0")
+                HourlyRate = decimal.Parse(rate ?? "0")
             };
 
+            ModelState.Clear();
             return View(vm);
         }
 
-        // POST Submit
+
+      
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Submit(SubmitClaimVm vm)
         {
@@ -57,13 +56,14 @@ namespace CMCS.Controllers
                 var claim = new Claim
                 {
                     LecturerName = vm.LecturerName,
-                    LecturerId = vm.LecturerId,
+                    LecturerId = HttpContext.Session.GetString("Username"),  // FIXED
                     Month = vm.Month,
                     HoursWorked = vm.HoursWorked,
                     HourlyRate = vm.HourlyRate,
                     Notes = vm.Notes,
                     Status = ClaimStatus.Pending
                 };
+
 
                 await _service.SubmitClaimAsync(claim, vm.FileUploads);
 
@@ -78,18 +78,18 @@ namespace CMCS.Controllers
         }
 
         [HttpGet]
+        
         public async Task<IActionResult> Track(string? searchLecturerId = null)
         {
-            var myId = HttpContext.Session.GetInt32("UserId");
+            var username = HttpContext.Session.GetString("Username");
 
-            if (myId == null)
+            if (username == null)
                 return RedirectToAction("Login", "Account");
 
             var claims = await _service.GetMyClaimsAsync();
 
-            // Guarantee only lecturer's claims are shown
             claims = claims
-                .Where(c => c.LecturerId == myId.ToString())
+                .Where(c => c.LecturerId == username)   // FIX
                 .ToList();
 
             if (!string.IsNullOrWhiteSpace(searchLecturerId))
@@ -101,6 +101,7 @@ namespace CMCS.Controllers
 
             return View(claims);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)

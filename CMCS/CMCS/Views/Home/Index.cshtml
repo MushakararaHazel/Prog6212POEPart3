@@ -1,38 +1,85 @@
 ﻿@{
-    ViewData["Title"] = "CMCS Dashboard";
+    ViewData["Title"] = "CMCS – Dashboard";
 }
 
-<div class="container text-center mt-5">
+<div class="container mt-5">
 
-    <h1 class="fw-bold display-5 text-primary">
-        Contract Monthly Claim System
-    </h1>
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">
+            <i class="bi bi-app-indicator"></i>
+            Contract Monthly Claim System
+        </h1>
+        <p class="lead text-muted">
+            Welcome to the CMCS Dashboard. Submit, Track, and Verify monthly claims effortlessly.
+        </p>
+    </div>
 
-    <p class="lead text-muted mt-2 mb-5">
-        Welcome to the CMCS Dashboard. Submit, Track, and Verify your monthly claims effortlessly.
-    </p>
 
-    <div class="d-flex justify-content-center gap-3 mt-3">
+    <!-- Stats Section -->
+    <div class="row g-4 justify-content-center mb-5">
 
-        <a href="/Lecturer/SubmitClaim" class="btn btn-primary btn-lg px-4 shadow-sm">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-primary">
+                    <i class="bi bi-file-earmark-text"></i> Total Claims
+                </h4>
+                <h2 class="fw-bold text-dark">@ViewBag.TotalClaims</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-warning">
+                    <i class="bi bi-hourglass-split"></i> Pending
+                </h4>
+                <h2 class="fw-bold">@ViewBag.Pending</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-success">
+                    <i class="bi bi-check2-circle"></i> Approved
+                </h4>
+                <h2 class="fw-bold">@ViewBag.Approved</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h4 class="fw-bold text-danger">
+                    <i class="bi bi-x-circle"></i> Rejected
+                </h4>
+                <h2 class="fw-bold">@ViewBag.Rejected</h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Navigation Buttons -->
+    <div class="text-center mb-5">
+        <a asp-controller="Lecturer" asp-action="Submit" class="btn btn-primary">
             <i class="bi bi-cloud-upload"></i> Submit Claim
         </a>
 
-        <a href="/Lecturer/TrackClaims" class="btn btn-outline-primary btn-lg px-4 shadow-sm">
-            <i class="bi bi-list-check"></i> Track Claims
+        <a asp-controller="Lecturer" asp-action="TrackClaim" class="btn btn-outline-primary">
+            <i class="bi bi-list-task"></i> Track Claims
         </a>
 
-        <a href="/Coordinator/VerifyClaims" class="btn btn-primary btn-lg px-4 shadow-sm">
-            <i class="bi bi-check2-circle"></i> Verify Claims
+        <a asp-controller="Coordinator" asp-action="Pending" class="btn btn-success">
+            <i class="bi bi-check-circle"></i> Verify Claims
         </a>
 
     </div>
 
+    <!-- Footer -->
+    <footer class="text-center mt-5 text-muted">
+        <small>
+            © 2025 Contract Monthly Claim System (CMCS)
+            <br />
+            Empowering efficiency through digital transformation.
+        </small>
+    </footer>
 </div>
-
-<div class="text-center mt-5 pb-3 text-muted small">
-    © 2025 Contract Monthly Claim System (CMCS)<br />
-    Empowering efficiency through digital transformation
-</div>
-
-

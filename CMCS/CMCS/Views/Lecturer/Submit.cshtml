@@ -35,13 +35,17 @@
 
         <div class="col-md-4">
             <label class="form-label fw-semibold">Lecturer Name</label>
-            <input asp-for="LecturerName" class="form-control" readonly />
+            <input asp-for="LecturerName" class="form-control" />
+
+            <span asp-validation-for="LecturerName" class="text-danger"></span>
         </div>
 
         <div class="col-md-4">
             <label class="form-label fw-semibold">Lecturer ID</label>
-            <input asp-for="LecturerId" class="form-control" readonly />
+            <input asp-for="LecturerId" class="form-control" />
+
         </div>
+
 
         <div class="col-md-4">
             <label class="form-label fw-semibold">Total Amount</label>

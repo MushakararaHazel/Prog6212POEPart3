@@ -7,4 +7,5 @@
         public decimal TotalAmount { get; set; }
         public int ClaimCount { get; set; }
     }
+
 }

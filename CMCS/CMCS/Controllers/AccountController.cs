@@ -16,21 +16,21 @@ namespace CMCS.Controllers
         }
 
         // =============================================
-        // GET Login – FIXES stale session showing old user
+        // GET Login
         // =============================================
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            // If user is already logged in, redirect them properly
+            // If already logged in → redirect to correct dashboard
             var role = HttpContext.Session.GetString("UserRole");
             if (!string.IsNullOrEmpty(role))
             {
                 return RedirectToRoleDashboard(role);
             }
 
-            HttpContext.Session.Clear(); // Clear any stale session
-
+            HttpContext.Session.Clear();
             ViewData["ReturnUrl"] = returnUrl;
+
             return View();
         }
 
@@ -54,22 +54,20 @@ namespace CMCS.Controllers
             if (user == null)
             {
                 ViewBag.Error = "Invalid username or password.";
-                HttpContext.Session.Clear(); // <--- IMPORTANT FIX
+                HttpContext.Session.Clear();
                 return View();
             }
 
-            // ========== Store Session ==========
+            // Store session values
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetInt32("UserId", user.Id);
-            HttpContext.Session.SetString("UserRole", user.Role.ToString());
+             HttpContext.Session.SetString("UserRole", user.Role.ToString());  // FIXED
             HttpContext.Session.SetString("FullName", $"{user.FirstName} {user.LastName}");
             HttpContext.Session.SetString("HourlyRate", user.HourlyRate.ToString());
 
-            // If redirected from a protected page
             if (!string.IsNullOrEmpty(returnUrl))
                 return Redirect(returnUrl);
 
-            // Redirect correctly by role
             return RedirectToRoleDashboard(user.Role.ToString());
         }
 
@@ -83,18 +81,27 @@ namespace CMCS.Controllers
         }
 
         // =============================================
-        // ROUTE REDIRECTOR (Fixes your issue)
+        // ROLE REDIRECTION (FULLY FIXED)
         // =============================================
         private IActionResult RedirectToRoleDashboard(string role)
         {
             return role switch
             {
-                nameof(UserRole.Lecturer) => RedirectToAction("Submit", "Lecturer"),
-                nameof(UserRole.Coordinator) => RedirectToAction("Pending", "Coordinator"),
-                nameof(UserRole.Manager) => RedirectToAction("Approved", "Manager"),
-                nameof(UserRole.HR) => RedirectToAction("Index", "HR"),
-                _ => RedirectToAction("Login")
+                nameof(UserRole.Lecturer)
+                    => RedirectToAction("Submit", "Lecturer"),
+
+                nameof(UserRole.Coordinator)
+                    => RedirectToAction("Pending", "Coordinator"),
+
+                nameof(UserRole.Manager)
+                    => RedirectToAction("Approved", "Manager"),
+
+                nameof(UserRole.HR)
+                    => RedirectToAction("Index", "HR"),
+
+                _ => RedirectToAction("Login", "Account")
             };
         }
+
     }
 }

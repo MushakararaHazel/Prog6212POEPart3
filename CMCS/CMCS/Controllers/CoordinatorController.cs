@@ -14,7 +14,10 @@ namespace CMCS.Controllers
             private readonly AppDbContext _db;
             public CoordinatorController(AppDbContext db) => _db = db;
 
-            public async Task<IActionResult> Pending()
+       
+        
+
+        public async Task<IActionResult> Pending()
             {
                 var claims = await _db.Claims
                    
