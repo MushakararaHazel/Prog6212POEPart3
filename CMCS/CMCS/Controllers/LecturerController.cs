@@ -56,7 +56,7 @@ namespace CMCS.Controllers
                 var claim = new Claim
                 {
                     LecturerName = vm.LecturerName,
-                    LecturerId = HttpContext.Session.GetString("Username"),  // FIXED
+                    LecturerId = HttpContext.Session.GetString("Username"),  
                     Month = vm.Month,
                     HoursWorked = vm.HoursWorked,
                     HourlyRate = vm.HourlyRate,
@@ -89,7 +89,7 @@ namespace CMCS.Controllers
             var claims = await _service.GetMyClaimsAsync();
 
             claims = claims
-                .Where(c => c.LecturerId == username)   // FIX
+                .Where(c => c.LecturerId == username)   
                 .ToList();
 
             if (!string.IsNullOrWhiteSpace(searchLecturerId))

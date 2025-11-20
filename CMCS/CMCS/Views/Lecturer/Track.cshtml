@@ -8,27 +8,10 @@
         <i class="bi bi-clock-history"></i> My Submitted Claims
     </h2>
 
-  
-    <form method="get" asp-action="Track" class="d-flex justify-content-end mb-3">
-        <input type="text"
-               name="searchLecturerId"
-               value="@Context.Request.Query["searchLecturerId"]"
-               class="form-control w-25 me-2"
-               placeholder="Search by Lecturer ID" />
-
-        <button type="submit" class="btn btn-outline-primary me-2">
-            <i class="bi bi-search"></i> Search
-        </button>
-
-        <a asp-action="Track" class="btn btn-outline-secondary">
-            <i class="bi bi-x-circle"></i> Clear
-        </a>
-    </form>
-
     @if (!Model.Any())
     {
         <div class="alert alert-info text-center">
-            No matching claims found.
+            You have no submitted claims yet.
         </div>
     }
     else
@@ -59,6 +42,7 @@
                             <td>@c.LecturerName</td>
                             <td>@c.LecturerId</td>
                             <td>@((c.HoursWorked * c.HourlyRate).ToString("N2"))</td>
+
                             <td>
                                 @if (c.Status == CMCS.Models.ClaimStatus.Approved)
                                 {
@@ -73,7 +57,9 @@
                                     <span class="badge bg-warning text-dark">Pending</span>
                                 }
                             </td>
+
                             <td>@(string.IsNullOrWhiteSpace(c.Notes) ? "—" : c.Notes)</td>
+
                             <td>
                                 @if (c.Documents?.Any() == true)
                                 {
@@ -91,6 +77,7 @@
                                     <span class="text-muted">—</span>
                                 }
                             </td>
+
                             <td>
                                 <form asp-action="Delete" asp-route-id="@c.Id" method="post" class="d-inline">
                                     <button type="submit"
@@ -100,6 +87,7 @@
                                     </button>
                                 </form>
                             </td>
+
                         </tr>
                     }
                 </tbody>
@@ -107,3 +95,4 @@
         </div>
     }
 </div>
+

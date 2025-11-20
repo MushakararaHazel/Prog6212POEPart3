@@ -9,10 +9,10 @@ namespace CMCS.Models
         public int Id { get; set; }
 
         [Required, MaxLength(50)]
-        public string Username { get; set; } = string.Empty;   // login ID / staff number
+        public string Username { get; set; } = string.Empty;   
 
         [Required, MaxLength(200)]
-        public string PasswordHash { get; set; } = string.Empty; // for POE you can store plain text if needed, but hashing is better
+        public string PasswordHash { get; set; } = string.Empty; 
 
         [Required, MaxLength(50)]
         public string FirstName { get; set; } = string.Empty;

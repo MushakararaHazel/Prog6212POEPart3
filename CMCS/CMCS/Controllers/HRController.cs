@@ -66,33 +66,40 @@ namespace CMCS.Controllers
         }
 
      
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(AppUser user)
+        public async Task<IActionResult> Edit(int id, AppUser updatedUser, string? password)
         {
-            if (!ModelState.IsValid)
-                return View(user);
+            if (id != updatedUser.Id)
+                return NotFound();
 
-            var existing = await _db.Users.FindAsync(user.Id);
-            if (existing == null) return NotFound();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+                return NotFound();
 
-            existing.Username = user.Username;
-            existing.Email = user.Email;
-            existing.FirstName = user.FirstName;
-            existing.LastName = user.LastName;
-            existing.HourlyRate = user.HourlyRate;
-            existing.Role = user.Role;
+            
+            user.Username = updatedUser.Username;
+            user.FirstName = updatedUser.FirstName;
+            user.LastName = updatedUser.LastName;
+            user.Email = updatedUser.Email;
+            user.HourlyRate = updatedUser.HourlyRate;
+            user.Role = updatedUser.Role;
 
-            if (!string.IsNullOrWhiteSpace(user.PasswordHash))
-                existing.PasswordHash = user.PasswordHash;
+            
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                user.PasswordHash = password; 
+            }
 
+            
             await _db.SaveChangesAsync();
 
             TempData["Success"] = "User updated successfully!";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "HR");
         }
 
-       
+
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -109,16 +116,31 @@ namespace CMCS.Controllers
 
         public async Task<IActionResult> GeneratePdf()
         {
-            var users = await _db.Users.ToListAsync();
+            var lecturers = await _db.Users
+      .Where(u => u.Role == UserRole.Lecturer)
+
+      .Select(u => new AppUser
+      {
+          Id = u.Id,
+          Username = u.Username,
+          Email = u.Email,
+          Role = u.Role,
+         
+          FirstName = u.FirstName,
+          LastName = u.LastName,
+          HourlyRate = u.HourlyRate
+      })
+      .ToListAsync();
+
 
             var vm = new ReportVm
             {
-                Users = users
+                Users = lecturers  
             };
 
             var pdfBytes = new ReportDocument(vm).GeneratePdf();
 
-            return File(pdfBytes, "application/pdf", "UserReport.pdf");
+            return File(pdfBytes, "application/pdf", "LecturerReport.pdf");
         }
 
     }

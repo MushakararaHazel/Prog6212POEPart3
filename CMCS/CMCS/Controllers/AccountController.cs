@@ -15,13 +15,10 @@ namespace CMCS.Controllers
             _db = db;
         }
 
-        // =============================================
-        // GET Login
-        // =============================================
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            // If already logged in → redirect to correct dashboard
+           
             var role = HttpContext.Session.GetString("UserRole");
             if (!string.IsNullOrEmpty(role))
             {
@@ -34,9 +31,7 @@ namespace CMCS.Controllers
             return View();
         }
 
-        // =============================================
-        // POST Login
-        // =============================================
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string username, string password, string? returnUrl = null)
@@ -58,7 +53,7 @@ namespace CMCS.Controllers
                 return View();
             }
 
-            // Store session values
+          
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetInt32("UserId", user.Id);
              HttpContext.Session.SetString("UserRole", user.Role.ToString());  // FIXED
@@ -71,18 +66,13 @@ namespace CMCS.Controllers
             return RedirectToRoleDashboard(user.Role.ToString());
         }
 
-        // =============================================
-        // LOGOUT
-        // =============================================
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
 
-        // =============================================
-        // ROLE REDIRECTION (FULLY FIXED)
-        // =============================================
+        
         private IActionResult RedirectToRoleDashboard(string role)
         {
             return role switch

@@ -86,6 +86,10 @@ wwwroot\uploads\f890fd89-23fb-40db-9b9d-3841305043e9_09f8387a2ccc43539938b7383de
 wwwroot\uploads\fa82818d-155f-404d-ac49-3a7987bedb9e_cupcakes.jpg
 wwwroot\uploads\8bcdf29b-3ae6-451a-a832-c3dd3f4254cd_7e8b3cd2-f86f-4535-a51c-9a4b3c09aa4c_09f8387a2ccc43539938b7383dec0da9.pdf
 wwwroot\uploads\0a293c04-86ef-45a8-b08c-71da63506bdb_7e358a5b-db2f-47ce-91d1-dd24fe54c711_6fea3ee614ed42b38126ad01f410162e.pdf
+wwwroot\uploads\83c41978-29cb-481d-96f9-20343a6be7f0_cupcakes.jpg
+wwwroot\uploads\32737ecd-8dd1-4bdf-97a6-d69765dd75e0_cupcakes.jpg
+wwwroot\uploads\63b949df-061e-4c80-9d13-beaf8e395bd0_cake.jpg
+wwwroot\uploads\bb773a43-ce84-4d21-813f-0df2fcfaff13_f890fd89-23fb-40db-9b9d-3841305043e9_09f8387a2ccc43539938b7383dec0da9.pdf
 C:\Users\lab_services_student\Desktop\Prog6212POEPart3\CMCS\CMCS\wwwroot\css\site.css
 C:\Users\lab_services_student\Desktop\Prog6212POEPart3\CMCS\CMCS\wwwroot\favicon.ico
 C:\Users\lab_services_student\Desktop\Prog6212POEPart3\CMCS\CMCS\wwwroot\js\site.js

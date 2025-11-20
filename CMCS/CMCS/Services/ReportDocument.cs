@@ -41,19 +41,22 @@ namespace CMCS.Reports
                     {
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.ConstantColumn(60);
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
-                            columns.RelativeColumn();
+                            columns.ConstantColumn(50);   
+                            columns.RelativeColumn();     
+                            columns.RelativeColumn();     
+                            columns.RelativeColumn();     
+                            columns.RelativeColumn();     
+                            columns.ConstantColumn(70);  
                         });
 
-                        // HEADER
                         table.Header(header =>
                         {
                             header.Cell().Text("ID").Bold();
                             header.Cell().Text("Username").Bold();
+                            header.Cell().Text("First Name").Bold();
+                            header.Cell().Text("Last Name").Bold();
                             header.Cell().Text("Email").Bold();
-                            header.Cell().Text("Role").Bold();
+                            header.Cell().Text("Rate").Bold();
                         });
 
                         // ROWS
@@ -61,9 +64,12 @@ namespace CMCS.Reports
                         {
                             table.Cell().Text(u.Id.ToString());
                             table.Cell().Text(u.Username);
+                            table.Cell().Text(u.FirstName ?? "-");
+                            table.Cell().Text(u.LastName ?? "-");
                             table.Cell().Text(u.Email ?? "-");
-                            table.Cell().Text(u.Role);
+                            table.Cell().Text(u.HourlyRate.ToString("N2"));
                         }
+
                     });
 
                 page.Footer()
