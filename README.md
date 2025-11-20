@@ -21,55 +21,30 @@ HR users manage all users and generate system reports.
 Attempts to access unauthorized pages redirect the user to an "Access Denied" view.
 
 
-HR can now generate cleaner, formatted PDF reports using QuestPDF. A filter was added to allow HR to generate lecturer-only reports, ensuring only relevant users are displayed. The PDF layout includes columns for ID, Username, Full Name, Email, Hourly Rate, and Role.User management now supports:
-
-Creating new accounts
-
-Editing user details
-
-Resetting passwords
-
-Viewing all registered users
-
-Downloading reports
-
-The UI has been streamlined using Bootstrap tables and action badges.
 
  System Features
+ 
  Lecturer Features
-
 Submit monthly claims
-
 Upload supporting documents (PDF, JPG, PNG)
-
 Automatic total calculation
-
 Track claim progress
-
 View history of submissions
 
 .2 Coordinator Features
 
 Access pending lecturer claims
-
 Verify or reject claims
-
 Add verification notes
 
 .3 Manager Features
-
 Review verified claims
-
 Approve and mark claims as paid
-
 Monitor claim flow
 
 .4 HR Features
-
 Manage all system users
-
 Add, edit, or delete user accounts
-
 Generate PDF system reports
 
 Access full system analytic
